@@ -65,7 +65,7 @@ class AutoDragFile(Gtk.Window):
 
     def hide_window(self):
         self.hide()
-        GLib.timeout_add(10000, self.quit_app)  # nach 1 Sekunde Prozess beenden
+        GLib.timeout_add(10000, self.quit_app)  # nach 10 Sekunde Prozess beenden
         return False
 
     def quit_app(self):
