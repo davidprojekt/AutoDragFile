@@ -21,7 +21,7 @@ Alternatively, you can build the binary and run it directly:
 cargo build --release
 
 # Run the compiled binary
-./target/release/auto-drag-file /path/to/your/file
+./target/release/AutoDragFile /path/to/your/file
 ```
 
 ## Dependencies
