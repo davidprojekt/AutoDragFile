@@ -25,7 +25,7 @@ cargo build --release
 ```
 
 ## Dependencies
-If you intend to only use the binary and not compile it yourself, you will only need `xdotool`!
+If you intend to only use the binary and not compile it yourself, you will only need `xdotool` and `gtk3`!
 
 This tool requires the Rust toolchain (installed via `rustup` or your package manager), `xdotool`, and GTK 3 development headers to build.
 
