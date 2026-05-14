@@ -27,13 +27,18 @@ class AutoDragFile(Gtk.Window):
 
         self.drag_source_set(Gdk.ModifierType.BUTTON1_MASK, [], Gdk.DragAction.COPY)
         self.drag_source_set_target_list(targets)
+        
+        # Signals
         self.connect("drag-data-get", self.on_drag_data_get)
         self.connect("drag-begin", self.on_drag_begin)
+        self.connect("drag-end", self.on_drag_end) 
 
         # Direkt unter Maus zeigen
         GLib.idle_add(self.move_to_mouse)
 
         self.drag_started = False
+        
+        # Safety-Timeout: Beendet das Skript, falls der Nutzer nie mit dem Drag beginnt
         GLib.timeout_add_seconds(3, self.force_quit_if_idle)
 
     def move_to_mouse(self):
@@ -52,24 +57,17 @@ class AutoDragFile(Gtk.Window):
 
     def on_drag_begin(self, widget, context):
         self.drag_started = True
-        # Rückmeldung zeigen und dann Fenster verstecken
-        self.label.set_markup('<span foreground="white" font_weight="bold">✅ Datei bereit</span>')
-        self.override_background_color(Gtk.StateFlags.NORMAL, Gdk.RGBA(0.2, 1.0, 0.2, 0.6))  # grünlicher Hintergrund
-        GLib.timeout_add(500, self.hide_window)
+        self.hide()
+
+    def on_drag_end(self, widget, context):
+        # Wird ausgelöst, sobald die Maus losgelassen wird (Drop oder Abbruch)
+        print("Drag beendet. Schließe Anwendung.")
+        Gtk.main_quit()
 
     def force_quit_if_idle(self):
         if not self.drag_started:
-            print("Kein Drag erkannt – beende Prozess.")
+            print("Kein Drag erkannt – beende Prozess (Safety-Timeout).")
             Gtk.main_quit()
-        return False
-
-    def hide_window(self):
-        self.hide()
-        GLib.timeout_add(10000, self.quit_app)  # nach 10 Sekunde Prozess beenden
-        return False
-
-    def quit_app(self):
-        Gtk.main_quit()
         return False
 
 
@@ -87,3 +85,4 @@ if __name__ == "__main__":
     win.connect("destroy", Gtk.main_quit)
     win.show_all()
     Gtk.main()
+    
